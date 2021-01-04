@@ -6,3 +6,5 @@ more:
 
 
 npm list --depth=0
+
+installing specific version: nmp i mongoose@2.1.4
