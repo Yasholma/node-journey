@@ -7,4 +7,10 @@ more:
 
 npm list --depth=0
 
-installing specific version: nmp i mongoose@2.1.4
+Installing specific version: nmp i mongoose@2.1.4
+
+To install major update use: npm-check-updates (npm i -g npm-check-updates)
+
+Installing devDependencies use npm i package -D or --save-dev
+
+Uninstalling dependencies use npm uninstall (un) package
