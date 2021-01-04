@@ -2,14 +2,11 @@
 // console.log(global);
 // console.log(module);
 
-// const logger = require("./logger");
-// console.log(logger.log("hello"));
-
 /** imports */
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
-
+const http = require("http");
 // path
 const pathObj = path.parse(__filename);
 // console.log(pathObj);
@@ -23,8 +20,37 @@ const freeMemory = os.freemem();
 
 // file system (fs)
 const filesSync = fs.readdirSync("./");
-console.log({ filesSync });
+// console.log({ filesSync });
 fs.readdir("./", (error, result) => {
   if (error) console.error(error);
-  console.log({ result });
+  //   console.log({ result });
+});
+
+// Events
+const Logger = require("./logger");
+const logger = new Logger();
+
+// listen
+logger.on("messageLogged", () => {
+  console.log("Something happened");
+});
+
+logger.on("logging", (data) => {
+  console.log(data);
+});
+
+// console.log(logger.log("hello"));
+
+// http
+const server = http.createServer((_req, res) => {
+  res.statusCode = 200;
+  res.end("Hello World");
+});
+
+server.on("connection", (socket) => {
+  console.log(socket);
+});
+
+server.listen(3000, () => {
+  console.log("Listening on port 3000");
 });
