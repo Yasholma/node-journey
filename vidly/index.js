@@ -1,14 +1,19 @@
 const express = require("express");
+const { connectDB } = require("./utils");
 const genresRoutes = require("./routes/genres");
 const customerRoutes = require("./routes/customers");
-const { connectDB } = require("./utils");
+const movieRoutes = require("./routes/movies");
 
 const app = express();
+
+// middlewares
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // routes
 app.use("/api/genres", genresRoutes);
 app.use("/api/customers", customerRoutes);
+app.use("/api/movies", movieRoutes);
 
 const PORT = process.env.PORT || 5000;
 

@@ -1,16 +1,6 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
 
-const validateGenre = (genre) =>
-  Joi.object({ title: Joi.string().min(3).required() }).validate(genre);
-
-const validateCustomer = (customer) =>
-  Joi.object({
-    name: Joi.string().required(),
-    phone: Joi.number().required(),
-    isGold: Joi.boolean().optional(),
-  }).validate(customer);
-
 const connectDB = async () => {
   try {
     mongoose.connect("mongodb://localhost/vidly", {
@@ -23,8 +13,27 @@ const connectDB = async () => {
   }
 };
 
+const validateGenre = (genre) =>
+  Joi.object({ title: Joi.string().min(3).required() }).validate(genre);
+
+const validateCustomer = (customer) =>
+  Joi.object({
+    name: Joi.string().required(),
+    phone: Joi.number().required(),
+    isGold: Joi.boolean(),
+  }).validate(customer);
+
+const validateMovie = (movie) =>
+  Joi.object({
+    title: Joi.string().required(),
+    genre: Joi.string().required(),
+    numberInStock: Joi.number(),
+    dailyRentalRate: Joi.number(),
+  }).validate(movie);
+
 module.exports = {
+  connectDB,
   validateGenre,
   validateCustomer,
-  connectDB,
+  validateMovie,
 };

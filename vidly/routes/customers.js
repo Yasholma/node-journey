@@ -1,6 +1,6 @@
 const { Router } = require("express");
-const Customer = require("../models/customers");
 const { validateCustomer } = require("../utils");
+const Customer = require("../models/customer");
 
 const router = Router();
 
@@ -41,7 +41,7 @@ router.post("/", async (req, res) => {
     });
 
     customer = await customer.save();
-    res.send(customer);
+    res.status(201).send(customer);
   } catch (error) {
     console.log(error);
     res.send("unable to create customer");
@@ -50,21 +50,15 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   const id = req.params.id;
-  //   const { error } = validateCustomer(req.body);
-  //   if (error) return res.send(error.details[0].message);
 
   try {
-    const customer = Customer.findByIdAndUpdate(
-      { _id: id },
-      {
-        $set: {
-          name: req.body.name,
-          phone: req.body.phone,
-          isGold: req.body.isGold || false,
-        },
-      },
-      { new: true }
-    );
+    let customer = await Customer.findById(id);
+
+    customer.name = req.body.name || customer.name;
+    customer.phone = req.body.phone || customer.phone;
+    customer.isGold = req.body.isGold || customer.isGold;
+
+    customer = await customer.save();
 
     res.send(customer);
   } catch (error) {

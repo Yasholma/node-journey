@@ -1,15 +1,16 @@
 const { Router } = require("express");
 const { validateGenre } = require("../utils");
-const Genre = require("../models/genres");
+const Genre = require("../models/genre");
 
 const router = Router();
 
 router.get("/", async (_req, res) => {
   try {
     const genres = await Genre.find();
-    return res.send(genres);
+    res.send(genres);
   } catch (error) {
-    return res.status(404).send("unable to fetch");
+    console.log(error);
+    res.status(404).send("unable to fetch");
   }
 });
 
