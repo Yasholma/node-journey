@@ -31,9 +31,16 @@ const validateMovie = (movie) =>
     dailyRentalRate: Joi.number(),
   }).validate(movie);
 
+const validateRental = (rental) =>
+  Joi.object({
+    customerId: Joi.string().required(),
+    movieId: Joi.string().required(),
+  }).validate(rental);
+
 module.exports = {
   connectDB,
   validateGenre,
   validateCustomer,
   validateMovie,
+  validateRental,
 };
