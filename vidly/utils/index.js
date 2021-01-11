@@ -6,6 +6,7 @@ const connectDB = async () => {
     mongoose.connect("mongodb://localhost/vidly", {
       useUnifiedTopology: true,
       useNewUrlParser: true,
+      useCreateIndex: true,
     });
     console.log("Successfully connected to the database");
   } catch (error) {
@@ -37,10 +38,25 @@ const validateRental = (rental) =>
     movieId: Joi.string().required(),
   }).validate(rental);
 
+const validateRegister = (user) =>
+  Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().min(6).max(255),
+  }).validate(user);
+
+const validateLogin = (user) =>
+  Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().min(6).max(255),
+  }).validate(user);
+
 module.exports = {
   connectDB,
   validateGenre,
   validateCustomer,
   validateMovie,
   validateRental,
+  validateRegister,
+  validateLogin,
 };
