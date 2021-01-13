@@ -3,18 +3,17 @@ const { validateGenre } = require("../utils");
 const Genre = require("../models/genre");
 const auth = require("../middlewares/auth");
 const admin = require("../middlewares/admin");
+const asyncMiddleware = require("../middlewares/asyncMiddleware");
 
 const router = Router();
 
-router.get("/", async (_req, res) => {
-  try {
+router.get(
+  "/",
+  asyncMiddleware(async (_req, res) => {
     const genres = await Genre.find();
     res.send(genres);
-  } catch (error) {
-    console.log(error);
-    res.status(404).send("unable to fetch");
-  }
-});
+  })
+);
 
 router.get("/:id", async (req, res) => {
   const id = req.params.id;

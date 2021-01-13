@@ -1,6 +1,7 @@
 const config = require("config");
 const express = require("express");
 const { connectDB } = require("./utils");
+const error = require("./middlewares/error");
 const genresRoutes = require("./routes/genres");
 const customerRoutes = require("./routes/customers");
 const movieRoutes = require("./routes/movies");
@@ -24,6 +25,9 @@ app.use("/api/customers", customerRoutes);
 app.use("/api/movies", movieRoutes);
 app.use("/api/rentals", rentalRoutes);
 app.use("/api/auth", authRoutes);
+
+// error handling
+app.use(error);
 
 const PORT = process.env.PORT || 5000;
 
