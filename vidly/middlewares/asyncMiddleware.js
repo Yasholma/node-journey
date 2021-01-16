@@ -1,6 +1,6 @@
 module.exports = (handler) => async (req, res, next) => {
   try {
-    handler(req, res);
+    await handler(req, res);
   } catch (error) {
     next(error);
   }

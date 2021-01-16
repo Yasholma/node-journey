@@ -1,3 +1,4 @@
+require("express-async-errors");
 const config = require("config");
 const express = require("express");
 const { connectDB } = require("./utils");
@@ -7,6 +8,35 @@ const customerRoutes = require("./routes/customers");
 const movieRoutes = require("./routes/movies");
 const rentalRoutes = require("./routes/rentals");
 const authRoutes = require("./routes/auth");
+
+const { dbOptions } = require("./utils");
+const { loggers, transports } = require("winston");
+require("winston-mongodb");
+
+loggers.add("vidly-log", {
+  transports: [
+    new transports.File({ filename: "logfile.log" }),
+    new transports.MongoDB({
+      db: dbOptions.url,
+      options: { ...dbOptions.options },
+    }),
+  ],
+});
+
+// handling uncaught exceptions
+process.on("uncaughtException", (ex) => {
+  loggers.get("vidly-log").error(ex.message, ex);
+  process.exit(1);
+});
+
+process.on("unhandledRejection", (ex) => {
+  loggers.get("vidly-log").error(ex.message, ex);
+  process.exit(1);
+});
+
+const e = Promise.reject(new Error("Error ooo"));
+
+e.then((r) => console.log(r));
 
 if (!config.get("jwtPrivateKey")) {
   console.error("FATAL ERROR: jwtPrivate key is not defined");

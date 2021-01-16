@@ -1,13 +1,18 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
 
+const dbOptions = {
+  url: "mongodb://localhost/vidly",
+  options: {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  },
+};
+
 const connectDB = async () => {
   try {
-    mongoose.connect("mongodb://localhost/vidly", {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-      useCreateIndex: true,
-    });
+    mongoose.connect(dbOptions.url, { ...dbOptions.options });
+    mongoose.set("useCreateIndex", true);
     console.log("Successfully connected to the database");
   } catch (error) {
     throw new Error(`Unable to connect to the database: ${error}`);
@@ -52,6 +57,7 @@ const validateLogin = (user) =>
   }).validate(user);
 
 module.exports = {
+  dbOptions,
   connectDB,
   validateGenre,
   validateCustomer,
